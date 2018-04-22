@@ -1,6 +1,7 @@
 Hero = require './hero.coffee'
 
 preload = ->
+  g.load.image('ball', 'images/ball.png')
   g.load.image('hero', 'images/hero.png')
   g.load.tilemap('map', 'tilemaps/test.csv', null, Phaser.Tilemap.CSV)
   g.load.image('tiles', 'images/tilemap.png')
@@ -13,10 +14,17 @@ create = ->
   g.layer.resizeWorld()
   g.map.setCollisionBetween(0, 9)
   
+  g.ball = g.add.sprite(150, 250, 'ball')
+  g.ball.anchor.set(0.5,0.5)
+  g.ball.inputEnabled = true
+  g.ball.events.onInputDown.add( (ball) ->
+    @game.itemClicked = ball
+  , this)
+  
   g.hero = new Hero(g, g.camera.width / 2, g.camera.height / 2, 'hero')
-  g.hero.body.setSize(64, 64);
+  g.hero.body.setSize(64, 64)
   g.hero.anchor.set(0.5,0.5)
-  g.add.existing(g.hero);
+  g.add.existing(g.hero)
 
 mouseDown = false
 heroExits = 'none'
@@ -43,10 +51,13 @@ update = ->
   if g.input.activePointer.isDown && !mouseDown
     mouseDown = true
     
-    g.hero.moveToXY(
+    
+    g.hero.moveToXY({
       x: g.camera.x + g.input.mousePointer.position.x
       y: g.camera.y + g.input.mousePointer.position.y
-    )
+    }, g.itemClicked)
+    
+    g.itemClicked = null if g.itemClicked
     
     if g.hero.target.x > (g.camera.x + g.camera.width) - g.hero.body.width / 2
       heroExits = 'right'
