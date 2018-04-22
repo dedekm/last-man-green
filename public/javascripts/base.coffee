@@ -11,20 +11,44 @@ create = ->
   g.layer.resizeWorld()
   g.map.setCollisionBetween(0, 9)
   
-  g.hero = g.add.sprite(g.world.centerX, g.world.centerY, 'hero')
+  g.hero = g.add.sprite(g.camera.width / 2, g.camera.height / 2, 'hero')
   g.physics.enable(g.hero, Phaser.Physics.ARCADE)
   g.hero.body.setSize(64, 64);
   g.hero.anchor.set(0.5,0.5)
 
 mouseDown = false
+heroExits = 'none'
 update = ->
+  if heroExits == 'right' && g.hero.x > (g.camera.x + g.camera.width) - g.hero.body.width / 2
+    g.camera.x += g.camera.width
+    g.hero.body.velocity.setTo(0, 0)
+    g.hero.x += g.hero.body.width / 2
+    heroExits = false
+  else if heroExits == 'left' && g.hero.x < g.camera.x + g.hero.body.width / 2
+    g.camera.x -= g.camera.width
+    g.hero.body.velocity.setTo(0, 0)
+    g.hero.x -= g.hero.body.width / 2
+    heroExits = false
+  
   g.physics.arcade.collide g.hero, g.layer, (hero, wall) ->
     if hero.body.blocked.up || hero.body.blocked.down
       g.hero.target = { x: g.hero.target.x, y: g.hero.position.y }
       g.physics.arcade.moveToXY(g.hero, g.hero.target.x, g.hero.target.y, 250)
+    if hero.body.blocked.right || hero.body.blocked.left
+      g.hero.target = { x: g.hero.position.x, y: g.hero.target.y }
+      g.physics.arcade.moveToXY(g.hero, g.hero.target.x, g.hero.target.y, 250)
     
   if g.input.activePointer.isDown && !mouseDown
-    g.hero.target = { x: g.input.mousePointer.position.x, y: g.input.mousePointer.position.y }
+    g.hero.target = {
+      x: g.camera.x + g.input.mousePointer.position.x
+      y: g.camera.y + g.input.mousePointer.position.y
+    }
+    
+    if g.hero.target.x > (g.camera.x + g.camera.width) - g.hero.body.width / 2
+      heroExits = 'right'
+    else if g.hero.target.x < g.camera.x + g.hero.body.width / 2
+      heroExits = 'left'
+      
     g.physics.arcade.moveToXY(g.hero, g.hero.target.x, g.hero.target.y, 250)
     mouseDown = true
   
@@ -34,7 +58,7 @@ update = ->
   if g.hero.target && g.hero.position.distance(g.hero.target) < 10
     g.hero.body.velocity.setTo(0, 0)
 
-g = new (Phaser.Game)(800, 600, Phaser.AUTO, 'ld41',
+g = new (Phaser.Game)(640, 480, Phaser.AUTO, 'ld41',
   preload: preload
   create: create
   update: update
