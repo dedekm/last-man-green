@@ -20,7 +20,12 @@ create = ->
   g.canvas.oncontextmenu = (e) ->
      e.preventDefault()
   
-  g.map = g.add.tilemap('map', 32, 32)
+  g.scale.scaleMode = Phaser.ScaleManager.USER_SCALE
+  g.scale.setUserScale(3, 3)
+  g.renderer.renderSession.roundPixels = true
+  Phaser.Canvas.setImageRenderingCrisp(g.canvas)
+  
+  g.map = g.add.tilemap('map', 16, 16)
   g.map.addTilesetImage('tiles')
   
   g.layer = g.map.createLayer(0)
@@ -49,11 +54,6 @@ create = ->
   g.add.existing(ball)
   
   g.hero = new Hero(g, g.camera.width / 2, g.camera.height / 2, 'hero')
-  g.hero.animations.add('walk');
-  g.hero.animations.add('idle', [0]);
-  g.hero.animations.play('idle');
-  g.hero.body.setSize(32, 12, 0, 40)
-  g.hero.anchor.set(0.5,1)
   g.add.existing(g.hero)
   
   g.input.onDown.add click
@@ -100,7 +100,7 @@ click = (pointer) ->
       else if g.hero.target.x < g.camera.x + g.hero.body.width / 2
         heroExits = 'left'
   
-g = new (Phaser.Game)(640, 480, Phaser.AUTO, 'ld41',
+g = new (Phaser.Game)(720 / 3, 480 / 3, Phaser.AUTO, 'ld41',
   preload: preload
   create: create
   update: update
