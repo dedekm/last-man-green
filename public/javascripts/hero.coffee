@@ -26,5 +26,11 @@ class Hero extends Phaser.Sprite
     
   stop: ->
     @body.velocity.setTo(0, 0)
+  
+  comment: (text) ->
+    comment = @game.add.bitmapText(@position.x - text.length * 12, @position.y - @body.height, 'default', text, 22)
+    @game.time.events.add(Phaser.Timer.SECOND * 2, ->
+      comment.destroy()
+    , this);
 
 module.exports = Hero
