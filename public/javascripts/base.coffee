@@ -53,7 +53,7 @@ create = ->
   ball.comment = 'Other nice ball.'
   g.add.existing(ball)
   
-  g.hero = new Hero(g, g.camera.width / 2, g.camera.height / 2, 'hero')
+  g.hero = new Hero(g, 100, 120, 'hero')
   g.add.existing(g.hero)
   
   g.input.onDown.add click
@@ -64,12 +64,22 @@ update = ->
     g.camera.x += g.camera.width
     g.hero.stop()
     g.hero.x += g.hero.body.width / 2
-    heroExits = false
+    heroExits = null
   else if heroExits == 'left' && g.hero.x < g.camera.x + g.hero.body.width / 2
     g.camera.x -= g.camera.width
     g.hero.stop()
     g.hero.x -= g.hero.body.width / 2
-    heroExits = false
+    heroExits = null
+  else if heroExits == 'up' && g.hero.y < g.camera.y + g.hero.body.height * 2
+    g.camera.y -= g.camera.height
+    g.hero.stop()
+    g.hero.y -= g.hero.body.height * 2
+    heroExits = null
+  else if heroExits == 'down' && g.hero.y > (g.camera.y + g.camera.height) - g.hero.body.height / 2
+    g.camera.y += g.camera.height
+    g.hero.stop()
+    g.hero.y += g.hero.body.height * 2
+    heroExits = null
   
   g.physics.arcade.collide g.hero, g.layer, (hero, wall) ->
     if hero.body.blocked.up || hero.body.blocked.down
@@ -92,14 +102,20 @@ click = (pointer) ->
         x: g.camera.x + pointer.position.x
         y: g.camera.y + pointer.position.y
       )
-  
+      
       g.itemClicked = null if g.itemClicked && !g.itemClicked.inInventory()
-  
+      
       if g.hero.target.x > (g.camera.x + g.camera.width) - g.hero.body.width / 2
         heroExits = 'right'
       else if g.hero.target.x < g.camera.x + g.hero.body.width / 2
         heroExits = 'left'
-  
+      else if g.hero.target.y < g.camera.y + g.hero.body.height
+        heroExits = 'up'
+      else if g.hero.target.y > (g.camera.y + g.camera.height) - g.hero.body.height / 2
+        heroExits = 'down'
+      else
+        heroExits = null
+
 g = new (Phaser.Game)(720 / 3, 480 / 3, Phaser.AUTO, 'ld41',
   preload: preload
   create: create

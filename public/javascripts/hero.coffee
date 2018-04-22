@@ -15,8 +15,8 @@ class Hero extends Phaser.Sprite
     @animations.add('down', [40..47], 9, true)
     @animations.add('idle', [48..55], 9, true)
 
-    @body.setSize(32, 12, 0, 40)
-    @anchor.set(0.5,1)
+    @body.setSize(20, 12, 6, 35)
+    @anchor.set(0.5,0.9)
     
   update: ->
     if @body.speed > 0
