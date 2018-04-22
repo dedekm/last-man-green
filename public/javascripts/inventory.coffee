@@ -6,10 +6,15 @@ class Inventory extends Object
     
   addItem: (item) ->
     @items.push(item)
-    item.position.x = 150 + (@items.length - 1) * 50
+    @setPosition(item)
+    
+  
+  setPosition: (item) ->
+    index = @items.indexOf item
+    item.position.x = 150 + index * 50
     item.position.y = 455
     item.fixedToCamera = true
-    item.pickable = false
+    item.state = 'inventory'
      
 module.exports = Inventory
     

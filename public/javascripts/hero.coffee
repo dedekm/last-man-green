@@ -10,19 +10,18 @@ class Hero extends Phaser.Sprite
   update: ->
     if @target && @position.distance(@target) < 10
       @stop()
-    
-    if @clicked && @position.distance(@clicked) < 40
+
+    if @game.itemClicked && @game.itemClicked.pickable() && @position.distance(@game.itemClicked.position) < 40
       @stop()
-      @pickUp(@clicked)
-      @clicked = null
+      @pickUp(@game.itemClicked)
       
-  moveToXY: (target, clicked) ->
+  moveToXY: (target) ->
     @target = target
     @game.physics.arcade.moveToXY(this, @target.x, @target.y, @speed)
-    @clicked = clicked
     
   pickUp: (item) ->
     @inventory.addItem item
+    @game.itemClicked = null
     
   stop: ->
     @body.velocity.setTo(0, 0)
@@ -31,6 +30,6 @@ class Hero extends Phaser.Sprite
     comment = @game.add.bitmapText(@position.x - text.length * 12, @position.y - @body.height, 'default', text, 22)
     @game.time.events.add(Phaser.Timer.SECOND * 2, ->
       comment.destroy()
-    , this);
+    , this)
 
 module.exports = Hero

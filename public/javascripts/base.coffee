@@ -1,5 +1,6 @@
 Hero = require './hero.coffee'
 Item = require './item.coffee'
+Combinations = require './combinations.coffee'
 
 preload = ->
   g.load.bitmapFont(
@@ -26,8 +27,16 @@ create = ->
   g.layer.resizeWorld()
   g.map.setCollisionBetween(0, 9)
   
-  inventory = g.add.image(120, 430, 'inventory')
+  inventory = g.add.sprite(120, 430, 'inventory')
   inventory.fixedToCamera = true
+  inventory.inputEnabled = true
+  inventory.events.onInputDown.add( (inventory, pointer) ->
+    if pointer.leftButton.isDown
+      if @game.itemClicked && @game.itemClicked.inHand()
+        @game.hero.inventory.setPosition(@game.itemClicked)
+        @game.itemClicked.inputEnabled = true
+        @game.itemClicked = null
+  , this)
   
   ball = new Item(g, 150, 250, 'ball')
   ball.anchor.set(0.5,0.5)
@@ -43,8 +52,9 @@ create = ->
   g.hero.body.setSize(64, 64)
   g.hero.anchor.set(0.5,0.5)
   g.add.existing(g.hero)
+  
+  g.input.onDown.add click
 
-mouseDown = false
 heroExits = 'none'
 update = ->
   if heroExits == 'right' && g.hero.x > (g.camera.x + g.camera.width) - g.hero.body.width / 2
@@ -65,28 +75,27 @@ update = ->
     if hero.body.blocked.right || hero.body.blocked.left
       g.hero.target = { x: g.hero.position.x, y: g.hero.target.y }
       g.physics.arcade.moveToXY(g.hero, g.hero.target.x, g.hero.target.y, 250)
-    
-  if g.input.activePointer.leftButton.isDown && !mouseDown
-    mouseDown = true
-    
-    
-    g.hero.moveToXY({
-      x: g.camera.x + g.input.mousePointer.position.x
-      y: g.camera.y + g.input.mousePointer.position.y
-    }, g.itemClicked)
-    
-    g.itemClicked = null if g.itemClicked
-    
-    if g.hero.target.x > (g.camera.x + g.camera.width) - g.hero.body.width / 2
-      heroExits = 'right'
-    else if g.hero.target.x < g.camera.x + g.hero.body.width / 2
-      heroExits = 'left'
-      
-  if g.input.activePointer.leftButton.isUp && mouseDown
-    mouseDown = false
 
+click = (pointer) ->
+   unless 120 < pointer.position.x < 640 - 120 && pointer.position.y > 430
+    if g.itemClicked && g.itemClicked.inInventory()
+      # FIXME: drop item
+    else
+      g.hero.moveToXY(
+        x: g.camera.x + pointer.position.x
+        y: g.camera.y + pointer.position.y
+      )
+  
+      g.itemClicked = null if g.itemClicked && !g.itemClicked.inInventory()
+  
+      if g.hero.target.x > (g.camera.x + g.camera.width) - g.hero.body.width / 2
+        heroExits = 'right'
+      else if g.hero.target.x < g.camera.x + g.hero.body.width / 2
+        heroExits = 'left'
+  
 g = new (Phaser.Game)(640, 480, Phaser.AUTO, 'ld41',
   preload: preload
   create: create
   update: update
 )
+g.combinations = new Combinations
