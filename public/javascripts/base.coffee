@@ -10,7 +10,7 @@ preload = ->
   )
   
   g.load.image('ball', 'images/ball.png')
-  g.load.image('hero', 'images/hero.png')
+  g.load.spritesheet('hero', 'images/hero_32x52.png', 32, 52)
   g.load.image('inventory', 'images/inventory.png')
   
   g.load.tilemap('map', 'tilemaps/test.csv', null, Phaser.Tilemap.CSV)
@@ -49,8 +49,11 @@ create = ->
   g.add.existing(ball)
   
   g.hero = new Hero(g, g.camera.width / 2, g.camera.height / 2, 'hero')
-  g.hero.body.setSize(64, 64)
-  g.hero.anchor.set(0.5,0.5)
+  g.hero.animations.add('walk');
+  g.hero.animations.add('idle', [0]);
+  g.hero.animations.play('idle');
+  g.hero.body.setSize(32, 12, 0, 40)
+  g.hero.anchor.set(0.5,1)
   g.add.existing(g.hero)
   
   g.input.onDown.add click
@@ -70,11 +73,15 @@ update = ->
   
   g.physics.arcade.collide g.hero, g.layer, (hero, wall) ->
     if hero.body.blocked.up || hero.body.blocked.down
-      g.hero.target = { x: g.hero.target.x, y: g.hero.position.y }
-      g.physics.arcade.moveToXY(g.hero, g.hero.target.x, g.hero.target.y, 250)
+      g.hero.moveToXY(
+        x: g.hero.target.x
+        y: g.hero.position.y
+      )
     if hero.body.blocked.right || hero.body.blocked.left
-      g.hero.target = { x: g.hero.position.x, y: g.hero.target.y }
-      g.physics.arcade.moveToXY(g.hero, g.hero.target.x, g.hero.target.y, 250)
+      g.hero.moveToXY(
+        x: g.hero.position.x
+        y: g.hero.target.y
+      )
 
 click = (pointer) ->
    unless 120 < pointer.position.x < 640 - 120 && pointer.position.y > 430
