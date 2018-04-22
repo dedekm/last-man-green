@@ -13,8 +13,8 @@ preload = ->
   g.load.spritesheet('hero', 'images/hero_32x52.png', 32, 52)
   g.load.image('inventory', 'images/inventory.png')
   
-  g.load.tilemap('map', 'tilemaps/test.csv', null, Phaser.Tilemap.CSV)
-  g.load.image('tiles', 'images/tilemap.png')
+  g.load.tilemap('map', 'tilemaps/tilemap.csv', null, Phaser.Tilemap.CSV)
+  g.load.image('tiles', 'images/stadion_tileset_16x16.png')
 
 create = ->
   g.canvas.oncontextmenu = (e) ->
@@ -30,7 +30,7 @@ create = ->
   
   g.layer = g.map.createLayer(0)
   g.layer.resizeWorld()
-  g.map.setCollisionBetween(0, 9)
+  g.map.setCollisionBetween(0, 57)
   
   inventory = g.add.sprite(120, 430, 'inventory')
   inventory.fixedToCamera = true
