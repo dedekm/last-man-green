@@ -9,7 +9,7 @@ preload = ->
     'fonts/carrier_command.xml'
   )
   
-  g.load.image('ball', 'images/ball.png')
+  g.load.spritesheet('ball', 'images/ball_10x10.png', 10, 10)
   g.load.spritesheet('hero', 'images/hero_32x52.png', 32, 52)
   g.load.image('inventory', 'images/inventory.png')
   
