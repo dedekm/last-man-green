@@ -1,17 +1,22 @@
-COMBINATIONS = {
-  ball_ball: 'Ball on ball, cool!'
-}
+
 
 class Combinations extends Object
+  VALID: {
+    ball_ball: 'Ball on ball, cool!'
+  }
+  
+  INVALID: [
+    "I don't think so!"
+  ]
+
   constructor: (game) ->
     super()
     @game = game
-    @list = COMBINATIONS
     
   check: (first, second) ->
-    result = @list["#{first.id}_#{second.id}"]
-    result ||= @list["#{second.id}_#{first.id}"]
-    result
+    result = @VALID["#{first.id}_#{second.id}"]
+    result ||= @VALID["#{second.id}_#{first.id}"]
+    result ||= @INVALID[parseInt(@BAD_COMBINATIONS.length * Math.random())]
 
 module.exports = Combinations
   
