@@ -116,9 +116,13 @@ click = (pointer) ->
       else
         heroExits = null
 
+render = ->
+    # g.debug.body(g.hero)
+
 g = new (Phaser.Game)(720 / 3, 480 / 3, Phaser.AUTO, 'ld41',
   preload: preload
   create: create
   update: update
+  render: render
 )
 g.combinations = new Combinations
