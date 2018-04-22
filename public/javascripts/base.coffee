@@ -1,8 +1,10 @@
 Hero = require './hero.coffee'
+Item = require './item.coffee'
 
 preload = ->
   g.load.image('ball', 'images/ball.png')
   g.load.image('hero', 'images/hero.png')
+  g.load.image('inventory', 'images/inventory.png')
   g.load.tilemap('map', 'tilemaps/test.csv', null, Phaser.Tilemap.CSV)
   g.load.image('tiles', 'images/tilemap.png')
 
@@ -14,12 +16,16 @@ create = ->
   g.layer.resizeWorld()
   g.map.setCollisionBetween(0, 9)
   
-  g.ball = g.add.sprite(150, 250, 'ball')
-  g.ball.anchor.set(0.5,0.5)
-  g.ball.inputEnabled = true
-  g.ball.events.onInputDown.add( (ball) ->
-    @game.itemClicked = ball
-  , this)
+  inventory = g.add.image(120, 430, 'inventory')
+  inventory.fixedToCamera = true
+  
+  ball = new Item(g, 150, 250, 'ball')
+  ball.anchor.set(0.5,0.5)
+  g.add.existing(ball)
+  
+  ball = new Item(g, 250, 250, 'ball')
+  ball.anchor.set(0.5,0.5)
+  g.add.existing(ball)
   
   g.hero = new Hero(g, g.camera.width / 2, g.camera.height / 2, 'hero')
   g.hero.body.setSize(64, 64)

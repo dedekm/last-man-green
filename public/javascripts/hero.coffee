@@ -1,8 +1,10 @@
+Inventory = require './inventory.coffee'
+
 class Hero extends Phaser.Sprite
   constructor: (game, x, y, key, frame) ->
     super game, x, y, key, frame
     @speed = 250
-    @inventory = []
+    @inventory = new Inventory(game)
     @game.physics.enable(this, Phaser.Physics.ARCADE)
     
   update: ->
@@ -20,9 +22,7 @@ class Hero extends Phaser.Sprite
     @clicked = clicked
     
   pickUp: (item) ->
-    @inventory.push item
-    item.position.x = 50
-    item.position.y = 400
+    @inventory.addItem item
     
   stop: ->
     @body.velocity.setTo(0, 0)
