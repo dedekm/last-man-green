@@ -1,3 +1,5 @@
+Hero = require './hero.coffee'
+
 preload = ->
   g.load.image('hero', 'images/hero.png')
   g.load.tilemap('map', 'tilemaps/test.csv', null, Phaser.Tilemap.CSV)
@@ -11,22 +13,22 @@ create = ->
   g.layer.resizeWorld()
   g.map.setCollisionBetween(0, 9)
   
-  g.hero = g.add.sprite(g.camera.width / 2, g.camera.height / 2, 'hero')
-  g.physics.enable(g.hero, Phaser.Physics.ARCADE)
+  g.hero = new Hero(g, g.camera.width / 2, g.camera.height / 2, 'hero')
   g.hero.body.setSize(64, 64);
   g.hero.anchor.set(0.5,0.5)
+  g.add.existing(g.hero);
 
 mouseDown = false
 heroExits = 'none'
 update = ->
   if heroExits == 'right' && g.hero.x > (g.camera.x + g.camera.width) - g.hero.body.width / 2
     g.camera.x += g.camera.width
-    g.hero.body.velocity.setTo(0, 0)
+    g.hero.stop()
     g.hero.x += g.hero.body.width / 2
     heroExits = false
   else if heroExits == 'left' && g.hero.x < g.camera.x + g.hero.body.width / 2
     g.camera.x -= g.camera.width
-    g.hero.body.velocity.setTo(0, 0)
+    g.hero.stop()
     g.hero.x -= g.hero.body.width / 2
     heroExits = false
   
@@ -39,24 +41,20 @@ update = ->
       g.physics.arcade.moveToXY(g.hero, g.hero.target.x, g.hero.target.y, 250)
     
   if g.input.activePointer.isDown && !mouseDown
-    g.hero.target = {
+    mouseDown = true
+    
+    g.hero.moveToXY(
       x: g.camera.x + g.input.mousePointer.position.x
       y: g.camera.y + g.input.mousePointer.position.y
-    }
+    )
     
     if g.hero.target.x > (g.camera.x + g.camera.width) - g.hero.body.width / 2
       heroExits = 'right'
     else if g.hero.target.x < g.camera.x + g.hero.body.width / 2
       heroExits = 'left'
       
-    g.physics.arcade.moveToXY(g.hero, g.hero.target.x, g.hero.target.y, 250)
-    mouseDown = true
-  
   if g.input.activePointer.isUp && mouseDown
     mouseDown = false
-    
-  if g.hero.target && g.hero.position.distance(g.hero.target) < 10
-    g.hero.body.velocity.setTo(0, 0)
 
 g = new (Phaser.Game)(640, 480, Phaser.AUTO, 'ld41',
   preload: preload
