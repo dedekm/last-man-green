@@ -15,7 +15,7 @@ class Item extends Phaser.Sprite
           @game.itemClicked = item
           @game.world.bringToTop(item)
       else if pointer.rightButton.isDown
-        @game.hero.commentItem @comment
+        @game.hero.commentItem this
     , this)
     
     @id = id || key

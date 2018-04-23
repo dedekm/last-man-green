@@ -17,12 +17,9 @@ class OtherPlayer extends Phaser.Sprite
       if pointer.rightButton.isDown
         @game.hero.comment @comment
     , this)
-    
-    @comment = 'Roberto something...'
-    
+        
     @ball = new Ball(@game, 0, 0, 'ball')
     @ball.anchor.set(0.5, 0.5)
-    @ball.comment = 'Nice ball.'
     @game.physics.enable(@ball, Phaser.Physics.ARCADE)
   
   add: (x, y, flipped = false) ->

@@ -115,9 +115,9 @@ class Hero extends Phaser.Sprite
       text = @game.mechanics.check(first, second)
       @comment(text) if text
   
-  commentItem: (text) ->
+  commentItem: (item) ->
     unless @state == 'commenting'
-      @comment(text)
+      @comment(@game.mechanics.ITEMS[item.key])
     
   commentTile: (index) ->
     unless @state == 'commenting'

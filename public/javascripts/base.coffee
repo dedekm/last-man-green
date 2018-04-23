@@ -61,7 +61,6 @@ create = ->
   gate = new Item(@game, 32, y, 'gate')
   gate.anchor.set(0, 0.5)
   gate.flipped = false
-  gate.comment = 'What is this?'
   g.add.existing(gate)
   
   gate = new Item(@game, g.world.width - 32, y, 'gate')

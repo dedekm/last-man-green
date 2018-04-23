@@ -9,6 +9,11 @@ class Mechanics extends Object
   TILEMAP_ITEMS:
     68: 'Dead bird probably.'
   
+  ITEMS:
+    ball: 'Nice ball.'
+    gate: 'What is this?'
+    other_player: 'Roberto something...'
+  
   VALID_COMBINATIONS:
     ball_gate: 'goal'
     
