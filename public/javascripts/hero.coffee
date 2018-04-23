@@ -47,9 +47,19 @@ class Hero extends Phaser.Sprite
       @stop()
       @pickUp(@game.itemClicked)
     
+    if @itemUsedPosition && @position.distance(@itemUsedPosition) < 10
+      @itemUsedCallback(this, @game.itemClicked)
+      @itemUsedPosition = null
+      @itemUsedCallback = null
+      @itemClicked = null
+      stop()
+    
   moveToItem: (target, callback) ->
-    @moveToXY(target, null)
-    callback(this) if callback
+    @moveToXY(target)
+    
+    if callback
+      @itemUsedPosition = target
+      @itemUsedCallback = callback
     
   moveToXY: (target, speed) ->
     @target = target

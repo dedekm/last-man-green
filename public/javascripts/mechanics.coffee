@@ -35,7 +35,23 @@ class Mechanics extends Object
       result ||= @INVALID_COMBINATIONS[parseInt(@INVALID_COMBINATIONS.length * Math.random())]
   
   goal: (ball, gate) ->
-    @game.hero.moveToItem gate, (hero) ->
+    position = gate.position.clone()
+    if gate.flipped
+      position.x -= 16 * 2.5
+      ball.qf = 16
+    else
+      position.x += 16 * 2.5
+      ball.qf = -16
+    
+    @game.hero.moveToItem position, (hero, ball) ->
+      hero.game.world.sendToBack(ball)
+      hero.game.world.moveUp(ball)
+      ball.fixedToCamera = false
+      ball.state = 'used'
+      ball.position.x = hero.x + ball.qf
+      ball.position.y = hero.y
+      ball.body.drag.x = 20
+      hero.game.physics.arcade.moveToXY(ball, ball.x + ball.qf * 2, ball.y, 20)
       hero.comment 'GOAL!'
     
 module.exports = Mechanics

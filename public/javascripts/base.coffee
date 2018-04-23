@@ -44,12 +44,14 @@ create = ->
   y = g.camera.height * 1.5
   gate = new Item(@game, 32, y, 'gate')
   gate.anchor.set(0, 0.5)
+  gate.flipped = false
   gate.comment = 'What is this?'
   g.add.existing(gate)
   
-  gate = new Item(@game, g.world.width - gate.width, y, 'gate')
+  gate = new Item(@game, g.world.width - 32, y, 'gate')
   gate.scale.x = -1
   gate.anchor.set(0, 0.5)
+  gate.flipped = true
   gate.comment = 'What is this?'
   g.add.existing(gate)
   g.input.onDown.add click

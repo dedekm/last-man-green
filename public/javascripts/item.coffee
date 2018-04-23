@@ -5,8 +5,8 @@ class Item extends Phaser.Sprite
     @events.onInputDown.add( (item, pointer) ->
       if pointer.leftButton.isDown
         if @game.itemClicked
-          @game.hero.commentCombination @game.itemClicked, item
-          @game.itemClicked.returnToInventory()
+          if @game.hero.commentCombination @game.itemClicked, item
+            @game.itemClicked.returnToInventory()
         else if @pickable()
           @game.itemClicked = item
         else if @inInventory()
