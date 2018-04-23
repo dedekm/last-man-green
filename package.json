@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon ./bin/www"
+    "start": "node ./bin/www"
   },
   "dependencies": {
     "browserify-middleware": "^8.1.0",
@@ -16,7 +16,6 @@
     "http-errors": "~1.6.2",
     "morgan": "~1.9.0",
     "node-sass-middleware": "0.11.0",
-    "phaser": "^3.3.0",
     "pug": "2.0.0-beta11"
   }
 }
