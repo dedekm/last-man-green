@@ -32,18 +32,7 @@ create = ->
   g.layer.resizeWorld()
   g.map.setCollisionBetween(0, 57)
   
-  inventory = g.add.sprite(120, 430, 'inventory')
-  inventory.fixedToCamera = true
-  inventory.inputEnabled = true
-  inventory.events.onInputDown.add( (inventory, pointer) ->
-    if pointer.leftButton.isDown
-      if @game.itemClicked && @game.itemClicked.inHand()
-        @game.hero.inventory.setPosition(@game.itemClicked)
-        @game.itemClicked.inputEnabled = true
-        @game.itemClicked = null
-  , this)
-  
-  ball = new Item(g, 150, 250, 'ball')
+  ball = new Item(g, 128, 128, 'ball')
   ball.anchor.set(0.5,0.5)
   ball.comment = 'Nice ball.'
   g.add.existing(ball)
@@ -57,28 +46,38 @@ create = ->
   g.add.existing(g.hero)
   
   g.input.onDown.add click
+  
+  createInventory()
 
 heroExits = 'none'
 update = ->
-  if heroExits == 'right' && g.hero.x > (g.camera.x + g.camera.width) - g.hero.body.height
-    g.camera.x += g.camera.width
-    g.hero.stop()
-    g.hero.x += g.hero.body.width / 2
+  if heroExits == 'right' && g.hero.x > g.camera.x + g.camera.width - g.hero.body.height
+    g.camera.x += g.camera.width - 16
+    g.hero.moveToXY(
+      x: g.camera.x + 28
+      y: g.hero.target.y
+    )
     heroExits = null
-  else if heroExits == 'left' && g.hero.x < g.camera.x + g.hero.body.height
-    g.camera.x -= g.camera.width
-    g.hero.stop()
-    g.hero.x -= g.hero.body.width / 2
+  else if heroExits == 'left' && g.hero.x < g.camera.x + g.hero.body.height + 16
+    g.camera.x -= g.camera.width - 16
+    g.hero.moveToXY(
+      x: g.camera.x + g.camera.width - 16
+      y: g.hero.target.y
+    )
     heroExits = null
   else if heroExits == 'up' && g.hero.y < g.camera.y + g.hero.body.height
     g.camera.y -= g.camera.height
-    g.hero.stop()
-    g.hero.y -= g.hero.body.height * 2
+    g.hero.moveToXY(
+      x: g.hero.target.x
+      y: g.camera.y + g.camera.height
+    )
     heroExits = null
-  else if heroExits == 'down' && g.hero.y > (g.camera.y + g.camera.height) - g.hero.body.height
+  else if heroExits == 'down' && g.hero.y > g.camera.y + g.camera.height - g.hero.body.height
     g.camera.y += g.camera.height
-    g.hero.stop()
-    g.hero.y += g.hero.body.height * 2
+    g.hero.moveToXY(
+      x: g.hero.target.x
+      y: g.camera.y + 16
+    )
     heroExits = null
   
   g.physics.arcade.collide g.hero, g.layer, (hero, wall) ->
@@ -94,7 +93,7 @@ update = ->
       )
 
 click = (pointer) ->
-  unless 120 < pointer.position.x < 640 - 120 && pointer.position.y > 430
+  if pointer.leftButton.isDown && pointer.position.x > 16
     if g.itemClicked && g.itemClicked.inInventory()
       # FIXME: drop item
     else
@@ -105,16 +104,38 @@ click = (pointer) ->
       
       g.itemClicked = null if g.itemClicked && !g.itemClicked.inInventory()
       
-      if g.hero.target.x > (g.camera.x + g.camera.width) - g.hero.body.height
+      if g.hero.target.x > g.camera.x + g.camera.width - g.hero.body.height
         heroExits = 'right'
-      else if g.hero.target.x < g.camera.x + g.hero.body.height
+      else if g.hero.target.x < g.camera.x + g.hero.body.height + 16
         heroExits = 'left'
       else if g.hero.target.y < g.camera.y + g.hero.body.height
         heroExits = 'up'
-      else if g.hero.target.y > (g.camera.y + g.camera.height) - g.hero.body.height
+      else if g.hero.target.y > g.camera.y + g.camera.height - g.hero.body.height
         heroExits = 'down'
       else
         heroExits = null
+        
+  else if pointer.rightButton.isDown
+    if g.itemClicked && g.itemClicked.inHand()
+      g.itemClicked.returnToInventory()
+
+createInventory = ->
+  graphics = g.add.graphics(100, 100)
+  graphics.beginFill(0x333333)
+  graphics.drawRect(0, 0, 16, g.camera.height)
+  
+  inventory = g.add.sprite(0, 0, graphics.generateTexture())
+  inventory.fixedToCamera = true
+  inventory.inputEnabled = true
+  inventory.events.onInputDown.add( (inventory, pointer) ->
+    if pointer.leftButton.isDown
+      if g.itemClicked && g.itemClicked.inHand()
+        g.hero.inventory.setPosition(g.itemClicked)
+        g.itemClicked.inputEnabled = true
+        g.itemClicked = null
+  , this)
+  
+  graphics.destroy()
 
 render = ->
     # g.debug.body(g.hero)

@@ -11,8 +11,9 @@ class Inventory extends Object
   
   setPosition: (item) ->
     index = @items.indexOf item
-    item.position.x = 150 + index * 50
-    item.position.y = 455
+    @game.world.bringToTop(item)
+    item.position.x = 8
+    item.position.y = 8 + index * 16
     item.fixedToCamera = true
     item.state = 'inventory'
      

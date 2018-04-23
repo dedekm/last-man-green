@@ -6,9 +6,7 @@ class Item extends Phaser.Sprite
       if pointer.leftButton.isDown
         if @game.itemClicked
           @game.hero.comment @game.combinations.check(@game.itemClicked, item)
-          @game.hero.inventory.setPosition(@game.itemClicked)
-          @game.itemClicked.inputEnabled = true
-          @game.itemClicked = null
+          @game.itemClicked.returnToInventory()
         else if @pickable()
           @game.itemClicked = item
         else if @inInventory()
@@ -33,9 +31,14 @@ class Item extends Phaser.Sprite
   inHand: ->
     @inInventory() && @game.itemClicked == this
   
+  returnToInventory: ->
+    @game.hero.inventory.setPosition(@game.itemClicked)
+    @inputEnabled = true
+    @game.itemClicked = null
+  
   update: ->
     if @inHand()
-      @position.x = @game.input.activePointer.position.x
-      @position.y = @game.input.activePointer.position.y
+      @position.x = @game.input.activePointer.position.x + @game.camera.x
+      @position.y = @game.input.activePointer.position.y + @game.camera.y
 
 module.exports = Item

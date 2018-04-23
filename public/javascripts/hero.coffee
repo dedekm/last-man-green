@@ -6,6 +6,7 @@ class Hero extends Phaser.Sprite
     @speed = 75
     @inventory = new Inventory(game)
     @game.physics.enable(this, Phaser.Physics.ARCADE)
+    @state = null
 
     @animations.add('left-down', [0..7], 9, true)
     @animations.add('left-up', [8..15], 9, true)
@@ -60,9 +61,12 @@ class Hero extends Phaser.Sprite
     @body.velocity.setTo(0, 0)
   
   comment: (text) ->
-    comment = @game.add.bitmapText(@position.x - text.length * 12, @position.y - @body.height, 'default', text, 22)
-    @game.time.events.add(Phaser.Timer.SECOND * 2, ->
-      comment.destroy()
-    , this)
+    unless @state == 'commenting'
+      comment = @game.add.bitmapText(@position.x - text.length, @position.y - @body.height, 'default', text, 5)
+      @state = 'commenting'
+      @game.time.events.add(Phaser.Timer.SECOND * 2, ->
+        comment.destroy()
+        @state = null
+      , this)
 
 module.exports = Hero
