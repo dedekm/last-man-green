@@ -15,7 +15,7 @@ class OtherPlayer extends Phaser.Sprite
     @inputEnabled = true
     @events.onInputDown.add( (item, pointer) ->
       if pointer.rightButton.isDown
-        @game.hero.comment @comment
+        @game.hero.commentItem this
     , this)
         
     @ball = new Ball(@game, 0, 0, 'ball')

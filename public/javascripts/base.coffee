@@ -16,7 +16,7 @@ preload = ->
   g.load.spritesheet('bomb_red', 'images/bomb_red_15x10.png', 15, 10)
   g.load.spritesheet('bomb_white', 'images/bomb_white_15x10.png', 15, 10)
   g.load.spritesheet('hero', 'images/hero_32x52.png', 32, 52)
-  g.load.spritesheet('falling', 'images/falling_52x52.png', 52, 52)
+  g.load.spritesheet('other_player', 'images/falling_52x52.png', 52, 52)
   
   g.load.tilemap('map', 'tilemaps/tilemap.csv', null, Phaser.Tilemap.CSV)
   g.load.image('tiles', 'images/stadion_tileset_16x16.png')
@@ -41,7 +41,7 @@ create = ->
   g.layer.resizeWorld()
   g.map.setCollisionBetween(0, 57)
   
-  g.otherPlayer = new OtherPlayer(g, 'falling')
+  g.otherPlayer = new OtherPlayer(g, 'other_player')
   
   g.camera.x = 2 * (g.camera.width - 16)
   g.camera.y = 2 * g.camera.height
