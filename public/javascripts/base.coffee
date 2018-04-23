@@ -60,22 +60,22 @@ create = ->
 
 heroExits = 'none'
 update = ->
-  if heroExits == 'right' && g.hero.x > (g.camera.x + g.camera.width) - g.hero.body.width / 2
+  if heroExits == 'right' && g.hero.x > (g.camera.x + g.camera.width) - g.hero.body.height
     g.camera.x += g.camera.width
     g.hero.stop()
     g.hero.x += g.hero.body.width / 2
     heroExits = null
-  else if heroExits == 'left' && g.hero.x < g.camera.x + g.hero.body.width / 2
+  else if heroExits == 'left' && g.hero.x < g.camera.x + g.hero.body.height
     g.camera.x -= g.camera.width
     g.hero.stop()
     g.hero.x -= g.hero.body.width / 2
     heroExits = null
-  else if heroExits == 'up' && g.hero.y < g.camera.y + g.hero.body.height * 2
+  else if heroExits == 'up' && g.hero.y < g.camera.y + g.hero.body.height
     g.camera.y -= g.camera.height
     g.hero.stop()
     g.hero.y -= g.hero.body.height * 2
     heroExits = null
-  else if heroExits == 'down' && g.hero.y > (g.camera.y + g.camera.height) - g.hero.body.height / 2
+  else if heroExits == 'down' && g.hero.y > (g.camera.y + g.camera.height) - g.hero.body.height
     g.camera.y += g.camera.height
     g.hero.stop()
     g.hero.y += g.hero.body.height * 2
@@ -94,7 +94,7 @@ update = ->
       )
 
 click = (pointer) ->
-   unless 120 < pointer.position.x < 640 - 120 && pointer.position.y > 430
+  unless 120 < pointer.position.x < 640 - 120 && pointer.position.y > 430
     if g.itemClicked && g.itemClicked.inInventory()
       # FIXME: drop item
     else
@@ -105,13 +105,13 @@ click = (pointer) ->
       
       g.itemClicked = null if g.itemClicked && !g.itemClicked.inInventory()
       
-      if g.hero.target.x > (g.camera.x + g.camera.width) - g.hero.body.width / 2
+      if g.hero.target.x > (g.camera.x + g.camera.width) - g.hero.body.height
         heroExits = 'right'
-      else if g.hero.target.x < g.camera.x + g.hero.body.width / 2
+      else if g.hero.target.x < g.camera.x + g.hero.body.height
         heroExits = 'left'
       else if g.hero.target.y < g.camera.y + g.hero.body.height
         heroExits = 'up'
-      else if g.hero.target.y > (g.camera.y + g.camera.height) - g.hero.body.height / 2
+      else if g.hero.target.y > (g.camera.y + g.camera.height) - g.hero.body.height
         heroExits = 'down'
       else
         heroExits = null

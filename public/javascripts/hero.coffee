@@ -3,7 +3,7 @@ Inventory = require './inventory.coffee'
 class Hero extends Phaser.Sprite
   constructor: (game, x, y, key, frame) ->
     super game, x, y, key, frame
-    @speed = 80
+    @speed = 75
     @inventory = new Inventory(game)
     @game.physics.enable(this, Phaser.Physics.ARCADE)
 
@@ -44,10 +44,13 @@ class Hero extends Phaser.Sprite
     if @game.itemClicked && @game.itemClicked.pickable() && @position.distance(@game.itemClicked.position) < 10
       @stop()
       @pickUp(@game.itemClicked)
-      
-  moveToXY: (target) ->
+    
+  moveToXY: (target, speed) ->
     @target = target
-    @game.physics.arcade.moveToXY(this, @target.x, @target.y, @speed)
+    @game.physics.arcade.moveToXY(this, @target.x, @target.y, speed || @speed)
+    @game.time.events.add(Phaser.Timer.SECOND * 0.5, ->
+      @moveToXY(@target, @speed + 20) if @body.speed > 0
+    , this)
     
   pickUp: (item) ->
     @inventory.addItem item
