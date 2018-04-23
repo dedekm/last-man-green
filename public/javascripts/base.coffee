@@ -35,10 +35,10 @@ create = ->
   g.map.setCollisionBetween(0, 57)
   
   g.otherPlayer = new OtherPlayer(g, 'falling')
-  g.add.existing(g.otherPlayer)
-  g.otherPlayer.run()
   
-  g.hero = new Hero(g, 100, 120, 'hero')
+  g.camera.x = 2 * (g.camera.width - 16)
+  g.camera.y = 2 * g.camera.height
+  g.hero = new Hero(g, 2.5 * g.camera.width - 2 * 16, 2.6 * g.camera.height, 'hero')
   g.add.existing(g.hero)
   
   g.input.onDown.add click
@@ -80,16 +80,17 @@ update = ->
     heroExits = null
     g.hero.travelled +=1
     
-    if g.hero.travelled >= 3
+    if g.hero.travelled >= 1 && g.otherPlayer.position.y == 0
       if g.camera.y == 0
         y = g.camera.position.y + g.camera.height / 4 * 3
       else
         y = g.camera.position.y + g.camera.height / 2
-      # g.ball.position.set(
-      #   g.camera.position.x + g.camera.width / 2,
-      #   y
-      # )
-      # g.add.existing(g.ball)
+      
+      g.otherPlayer.add(
+        32,
+        y,
+        g.hero.position.x - g.camera.x < g.camera.width / 2
+      )
   
   g.physics.arcade.collide g.hero, g.layer, (hero, wall) ->
     if hero.body.blocked.up || hero.body.blocked.down

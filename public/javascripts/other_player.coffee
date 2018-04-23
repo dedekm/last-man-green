@@ -2,10 +2,10 @@ Ball = require './ball.coffee'
 
 class OtherPlayer extends Phaser.Sprite
   constructor: (game, key, frame) ->
-    super game, -16, 128, key, frame
+    super game, 0, 0, key, frame
     @speed = 85
 
-    @animations.add('run', [0..7], 9, true)
+    @animations.add('run', [0..4], 9)
     @animations.add('fall', [8..22], 9)
     
     @game.physics.enable(this, Phaser.Physics.ARCADE)
@@ -25,18 +25,29 @@ class OtherPlayer extends Phaser.Sprite
     @ball.comment = 'Nice ball.'
     @game.physics.enable(@ball, Phaser.Physics.ARCADE)
   
-  run: ->
-    @ball.position.set(@x + @ball.width, @y - @ball.width / 2)
+  add: (x, y, flipped = false) ->
+    flipped = if !flipped then 1 else -1
+    
+    if flipped == -1
+      x = @game.camera.x + @game.camera.width + x
+    else
+      x = @game.camera.x - x
+    @position.set(
+      x,
+      y
+    )
+    @scale.x = flipped
+    @game.add.existing(this)
+    @ball.position.set(@x + 14 * flipped, @y - @ball.width / 2)
     @game.add.existing(@ball)
-    @animations.play('run', 9, true)
-    @game.physics.arcade.moveToXY(@ball, @ball.x + @game.camera.width, @ball.y, @speed + 10)
-    @game.physics.arcade.moveToXY(this, @x + @game.camera.width, @y, @speed)
-    @game.time.events.add(Phaser.Timer.SECOND * 0, ->
-      @events.onAnimationLoop.add(  ->
-        @events.onAnimationLoop.removeAll()
-        @fall()
-      , this)
-    , this)
+    @game.world.bringToTop(@game.hero)
+    
+    @run(flipped)
+  
+  run: (flipped) ->
+    @game.physics.arcade.moveToXY(@ball, @ball.x + @game.camera.width * flipped, @ball.y, @speed + 10)
+    @game.physics.arcade.moveToXY(this, @x + @game.camera.width * flipped, @y, @speed)
+    @fall()
   
   fall: ->
     @animations.play('fall', 9)
