@@ -23,6 +23,7 @@ preload = ->
   
   g.load.audio('run-grass', 'audio/run_grass.mp3')
   g.load.audio('run-wet', 'audio/run_wet.mp3')
+  g.load.audio('final', 'audio/final.mp3')
 
 create = ->
   g.canvas.oncontextmenu = (e) ->

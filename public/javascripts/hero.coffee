@@ -19,8 +19,11 @@ class Hero extends Phaser.Sprite
     
     @sounds = {
       'run-grass': @game.add.audio('run-grass', 1, true),
-      'run-wet': @game.add.audio('run-wet', 1, true)
+      'run-wet': @game.add.audio('run-wet', 1, true),
+      'final': @game.add.audio('final')
     }
+    @sounds['final'].addMarker('start', 0, 2.9)
+    @sounds['final'].addMarker('goal', 2.9, 23)
 
     @body.setSize(20, 12, 6, 35)
     @anchor.set(0.5,0.9)
@@ -41,9 +44,9 @@ class Hero extends Phaser.Sprite
       else if 115 <= angle <= 180
         animation = 'left-down'
       
-      @game.hero.animations.play(animation, 9, true) if animation
+      @animations.play(animation, 9, true) if animation
     else
-      @game.hero.animations.stop(null, true)
+      @animations.stop(null, true)
       
     if @target && @position.distance(@target) < 5
       @stop()
@@ -52,7 +55,15 @@ class Hero extends Phaser.Sprite
       @stop()
       @pickUp(@game.itemClicked)
     
+    if @itemUsedPosition && @position.distance(@itemUsedPosition) < 100
+      unless @sounds['final'].isPlaying
+        @sounds['final'].play('start')
+    
     if @itemUsedPosition && @position.distance(@itemUsedPosition) < 10
+      if @sounds['final'].currentTime < 3000
+        @sounds['final'].stop()
+        @sounds['final'].play('goal')
+      
       @itemUsedCallback(this, @game.itemClicked)
       @itemUsedPosition = null
       @itemUsedCallback = null
