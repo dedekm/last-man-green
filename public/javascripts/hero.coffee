@@ -7,6 +7,7 @@ class Hero extends Phaser.Sprite
     @inventory = new Inventory(game)
     @game.physics.enable(this, Phaser.Physics.ARCADE)
     @state = null
+    @travelled = 0
 
     @animations.add('left-down', [0..7], 9, true)
     @animations.add('left-up', [8..15], 9, true)

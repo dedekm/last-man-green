@@ -32,15 +32,9 @@ create = ->
   g.layer.resizeWorld()
   g.map.setCollisionBetween(0, 57)
   
-  ball = new Item(g, 128, 128, 'ball')
-  ball.anchor.set(0.5,0.5)
-  ball.comment = 'Nice ball.'
-  g.add.existing(ball)
-  
-  ball = new Item(g, 250, 250, 'ball')
-  ball.anchor.set(0.5,0.5)
-  ball.comment = 'Other nice ball.'
-  g.add.existing(ball)
+  g.ball = new Item(g, 128, 128, 'ball')
+  g.ball.anchor.set(0.5,0.5)
+  g.ball.comment = 'Nice ball.'
   
   g.hero = new Hero(g, 100, 120, 'hero')
   g.add.existing(g.hero)
@@ -57,28 +51,43 @@ update = ->
       x: g.camera.x + 28
       y: g.hero.target.y
     )
-    heroExits = null
+    travelled = true
   else if heroExits == 'left' && g.hero.x < g.camera.x + g.hero.body.height + 16
     g.camera.x -= g.camera.width - 16
     g.hero.moveToXY(
       x: g.camera.x + g.camera.width - 16
       y: g.hero.target.y
     )
-    heroExits = null
+    travelled = true
   else if heroExits == 'up' && g.hero.y < g.camera.y + g.hero.body.height
     g.camera.y -= g.camera.height
     g.hero.moveToXY(
       x: g.hero.target.x
       y: g.camera.y + g.camera.height
     )
-    heroExits = null
+    travelled = true
   else if heroExits == 'down' && g.hero.y > g.camera.y + g.camera.height - g.hero.body.height
     g.camera.y += g.camera.height
     g.hero.moveToXY(
       x: g.hero.target.x
       y: g.camera.y + 16
     )
+    travelled = true
+  
+  if travelled
     heroExits = null
+    g.hero.travelled +=1
+    
+    if g.hero.travelled >= 3
+      if g.camera.y == 0
+        y = g.camera.position.y + g.camera.height / 4 * 3
+      else
+        y = g.camera.position.y + g.camera.height / 2
+      g.ball.position.set(
+        g.camera.position.x + g.camera.width / 2,
+        y
+      )
+      g.add.existing(g.ball)
   
   g.physics.arcade.collide g.hero, g.layer, (hero, wall) ->
     if hero.body.blocked.up || hero.body.blocked.down
