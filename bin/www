@@ -5,7 +5,7 @@
  */
 require('coffeescript/register')
 var app = require('../app.coffee');
-var debug = require('debug')('ld41:server');
+var debug = require('debug')('last-man-green:server');
 var http = require('http');
 
 /**

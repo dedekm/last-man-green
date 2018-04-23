@@ -140,7 +140,7 @@ createInventory = ->
 render = ->
     # g.debug.body(g.hero)
 
-g = new (Phaser.Game)(720 / 3, 480 / 3, Phaser.AUTO, 'ld41',
+g = new (Phaser.Game)(720 / 3, 480 / 3, Phaser.AUTO, 'last-man-green',
   preload: preload
   create: create
   update: update
