@@ -11,9 +11,9 @@ preload = ->
   )
   
   g.load.spritesheet('ball', 'images/ball_10x10.png', 10, 10)
+  g.load.image('gate', 'images/gate_32x96.png')
   g.load.spritesheet('hero', 'images/hero_32x52.png', 32, 52)
   g.load.spritesheet('falling', 'images/falling_52x52.png', 52, 52)
-  g.load.image('inventory', 'images/inventory.png')
   
   g.load.tilemap('map', 'tilemaps/tilemap.csv', null, Phaser.Tilemap.CSV)
   g.load.image('tiles', 'images/stadion_tileset_16x16.png')
@@ -41,6 +41,17 @@ create = ->
   g.hero = new Hero(g, 2.5 * g.camera.width - 2 * 16, 2.6 * g.camera.height, 'hero')
   g.add.existing(g.hero)
   
+  y = g.camera.height * 1.5
+  gate = new Item(@game, 32, y, 'gate')
+  gate.anchor.set(0, 0.5)
+  gate.comment = 'What is this?'
+  g.add.existing(gate)
+  
+  gate = new Item(@game, g.world.width - gate.width, y, 'gate')
+  gate.scale.x = -1
+  gate.anchor.set(0, 0.5)
+  gate.comment = 'What is this?'
+  g.add.existing(gate)
   g.input.onDown.add click
   
   createInventory()
