@@ -171,4 +171,4 @@ g = new (Phaser.Game)(720 / 3, 480 / 3, Phaser.AUTO, 'last-man-green',
   update: update
   render: render
 )
-g.mechanics = new Mechanics
+g.mechanics = new Mechanics(g)

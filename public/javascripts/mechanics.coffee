@@ -10,6 +10,9 @@ class Mechanics extends Object
     68: 'Dead bird probably.'
   
   VALID_COMBINATIONS:
+    ball_gate: 'goal'
+    
+  COMBINATIONS_WITH_COMMENTS:
     ball_ball: 'Ball on ball, cool!'
   
   INVALID_COMBINATIONS: [
@@ -23,8 +26,17 @@ class Mechanics extends Object
     
   check: (first, second) ->
     result = @VALID_COMBINATIONS["#{first.id}_#{second.id}"]
-    result ||= @VALID_COMBINATIONS["#{second.id}_#{first.id}"]
-    result ||= @INVALID_COMBINATIONS[parseInt(@INVALID_COMBINATIONS.length * Math.random())]
-
+    if result
+      this[result](first, second)
+      null
+    else
+      result = @COMBINATIONS_WITH_COMMENTS["#{first.id}_#{second.id}"]
+      result ||= @COMBINATIONS_WITH_COMMENTS["#{second.id}_#{first.id}"]
+      result ||= @INVALID_COMBINATIONS[parseInt(@INVALID_COMBINATIONS.length * Math.random())]
+  
+  goal: (ball, gate) ->
+    @game.hero.moveToItem gate, (hero) ->
+      hero.comment 'GOAL!'
+    
 module.exports = Mechanics
   

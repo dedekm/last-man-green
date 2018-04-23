@@ -47,6 +47,10 @@ class Hero extends Phaser.Sprite
       @stop()
       @pickUp(@game.itemClicked)
     
+  moveToItem: (target, callback) ->
+    @moveToXY(target, null)
+    callback(this) if callback
+    
   moveToXY: (target, speed) ->
     @target = target
     @game.physics.arcade.moveToXY(this, @target.x, @target.y, speed || @speed)
@@ -76,7 +80,7 @@ class Hero extends Phaser.Sprite
   commentCombination: (first, second) ->
     unless @state == 'commenting'
       text = @game.mechanics.check(first, second)
-      @comment(text)
+      @comment(text) if text
   
   commentItem: (text) ->
     unless @state == 'commenting'
