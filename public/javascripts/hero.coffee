@@ -78,15 +78,16 @@ class Hero extends Phaser.Sprite
       @itemUsedCallback = callback
     
   moveToXY: (target, speed) ->
-    @target = target
-    @game.physics.arcade.moveToXY(this, @target.x, @target.y, speed || @speed)
-    unless @soundPlaying && @soundPlaying == @sounds['run-grass']
-      @soundPlaying = @sounds['run-grass']
-      @soundPlaying.play()
-    
-    @game.time.events.add(Phaser.Timer.SECOND * 0.5, ->
-      @moveToXY(@target, @speed + 20) if @body.speed > 0
-    , this)
+    unless @isFrozen()
+      @target = target
+      @game.physics.arcade.moveToXY(this, @target.x, @target.y, speed || @speed)
+      unless @soundPlaying && @soundPlaying == @sounds['run-grass']
+        @soundPlaying = @sounds['run-grass']
+        @soundPlaying.play()
+      
+      @game.time.events.add(Phaser.Timer.SECOND * 0.5, ->
+        @moveToXY(@target, @speed + 20) if @body.speed > 0
+      , this)
     
   pickUp: (item) ->
     @inventory.addItem item
@@ -125,5 +126,15 @@ class Hero extends Phaser.Sprite
       text = @game.mechanics.TILEMAP_ITEMS[text] if typeof text == 'number'
       @comment(text) if text
   
+  freeze: () ->
+    @state = 'frozen'
+    @game.canvas.classList.add('frozen')
+
+  unfreeze: () ->
+    @state = null
+    @game.canvas.classList.remove('frozen')
+     
+  isFrozen: ->
+    @state == 'frozen'
 
 module.exports = Hero

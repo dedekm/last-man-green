@@ -50,6 +50,7 @@ class OtherPlayer extends Phaser.Sprite
     @animations.play('fall', 9)
     @events.onAnimationComplete.add( ->
       @body.velocity.setTo(0, 0)
+      @game.hero.unfreeze()
     , this)
     
 module.exports = OtherPlayer

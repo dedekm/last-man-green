@@ -109,6 +109,10 @@ update = ->
     g.hero.travelled +=1
     
     if g.hero.travelled >= 1 && g.otherPlayer.position.y == 0
+      return if g.camera.x == 0 || g.camera.x == g.world.width - g.camera.width
+      
+      g.hero.freeze()
+      
       if g.camera.y == 0
         y = g.camera.position.y + g.camera.height / 4 * 3
       else
@@ -117,7 +121,7 @@ update = ->
       g.otherPlayer.add(
         32,
         y,
-        g.hero.position.x - g.camera.x < g.camera.width / 2
+        g.hero.position.x + g.camera.x < g.camera.x + g.camera.width / 2
       )
   
   g.physics.arcade.collide g.hero, g.layer, (hero, wall) ->
@@ -133,33 +137,34 @@ update = ->
       )
 
 click = (pointer) ->
-  if pointer.leftButton.isDown && pointer.position.x > 16
-    if g.itemClicked && g.itemClicked.inInventory()
-      # FIXME: drop item
-    else
-      g.hero.moveToXY(
-        x: g.camera.x + pointer.position.x
-        y: g.camera.y + pointer.position.y
-      )
-      
-      g.itemClicked = null if g.itemClicked && !g.itemClicked.inInventory()
-      
-      if g.hero.target.x > g.camera.x + g.camera.width - g.hero.body.height
-        heroExits = 'right'
-      else if g.hero.target.x < g.camera.x + g.hero.body.height + 16
-        heroExits = 'left'
-      else if g.hero.target.y < g.camera.y + g.hero.body.height
-        heroExits = 'up'
-      else if g.hero.target.y > g.camera.y + g.camera.height - g.hero.body.height
-        heroExits = 'down'
+  unless g.hero.isFrozen()
+    if pointer.leftButton.isDown && pointer.position.x > 16
+      if g.itemClicked && g.itemClicked.inInventory()
+        # FIXME: drop item
       else
-        heroExits = null
+        g.hero.moveToXY(
+          x: g.camera.x + pointer.position.x
+          y: g.camera.y + pointer.position.y
+        )
         
-  else if pointer.rightButton.isDown
-    if g.itemClicked && g.itemClicked.inHand()
-      g.itemClicked.returnToInventory()
-    else
-      g.hero.commentTile(g.map.getTileWorldXY(g.camera.x + pointer.x, g.camera.y + pointer.y).index)
+        g.itemClicked = null if g.itemClicked && !g.itemClicked.inInventory()
+        
+        if g.hero.target.x > g.camera.x + g.camera.width - g.hero.body.height
+          heroExits = 'right'
+        else if g.hero.target.x < g.camera.x + g.hero.body.height + 16
+          heroExits = 'left'
+        else if g.hero.target.y < g.camera.y + g.hero.body.height
+          heroExits = 'up'
+        else if g.hero.target.y > g.camera.y + g.camera.height - g.hero.body.height
+          heroExits = 'down'
+        else
+          heroExits = null
+          
+    else if pointer.rightButton.isDown
+      if g.itemClicked && g.itemClicked.inHand()
+        g.itemClicked.returnToInventory()
+      else
+        g.hero.commentTile(g.map.getTileWorldXY(g.camera.x + pointer.x, g.camera.y + pointer.y).index)
 
 createInventory = ->
   graphics = g.add.graphics(100, 100)
