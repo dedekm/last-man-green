@@ -52,6 +52,15 @@ class Mechanics extends Object
       ball.position.y = hero.y
       ball.body.drag.x = 20
       hero.game.physics.arcade.moveToXY(ball, ball.x + ball.qf * 2, ball.y, 20)
+      
+      bomb = @game.bombs[0]
+      @game.add.existing(bomb)
+      bomb.fly(70, -65, bomb.y + 50)
+      
+      bomb = @game.bombs[1]
+      @game.add.existing(bomb)
+      bomb.fly(-70, -65, bomb.y + 50)
+      
       hero.comment 'GOAL!'
     
 module.exports = Mechanics

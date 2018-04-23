@@ -1,5 +1,6 @@
 Hero = require './hero.coffee'
 Item = require './item.coffee'
+Bomb = require './bomb.coffee'
 OtherPlayer = require './other_player.coffee'
 Mechanics = require './mechanics.coffee'
 
@@ -12,6 +13,8 @@ preload = ->
   
   g.load.spritesheet('ball', 'images/ball_10x10.png', 10, 10)
   g.load.image('gate', 'images/gate_32x96.png')
+  g.load.spritesheet('bomb_red', 'images/bomb_red_15x10.png', 15, 10)
+  g.load.spritesheet('bomb_white', 'images/bomb_white_15x10.png', 15, 10)
   g.load.spritesheet('hero', 'images/hero_32x52.png', 32, 52)
   g.load.spritesheet('falling', 'images/falling_52x52.png', 52, 52)
   
@@ -44,6 +47,15 @@ create = ->
   g.hero = new Hero(g, 2.5 * g.camera.width - 2 * 16, 2.6 * g.camera.height, 'hero')
   g.add.existing(g.hero)
   
+  g.bombs = []
+  g.bombs.push new Bomb(@game, -20, 190, 'bomb_white')
+  g.bombs.push new Bomb(@game, g.camera.width + 20, 200, 'bomb_red')
+  for bomb in g.bombs
+    bomb.animations.add('burn', [1,2], 5, true)
+  g.bombs[1].scale.x = -1
+
+  @game.physics.enable(g.bombs, Phaser.Physics.ARCADE)
+  g.add.existing(g.bombs[0])
   y = g.camera.height * 1.5
   gate = new Item(@game, 32, y, 'gate')
   gate.anchor.set(0, 0.5)
