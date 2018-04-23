@@ -57,6 +57,10 @@ class Mechanics extends Object
       ball.position.y = hero.y
       ball.body.drag.x = 20
       hero.game.physics.arcade.moveToXY(ball, ball.x + ball.qf * 2, ball.y, 20)
+      if ball.qf == 16
+        ball.move(-1)
+      else
+        ball.move(1)
       
       bomb = @game.bombs[0]
       @game.add.existing(bomb)

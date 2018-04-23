@@ -38,6 +38,7 @@ class OtherPlayer extends Phaser.Sprite
     @scale.x = flipped
     @game.add.existing(this)
     @ball.position.set(@x + 14 * flipped, @y - @ball.width / 2)
+    @ball.move(flipped)
     @game.add.existing(@ball)
     @game.world.bringToTop(@game.hero)
     
