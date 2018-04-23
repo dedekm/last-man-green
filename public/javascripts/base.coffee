@@ -24,6 +24,7 @@ preload = ->
   g.load.audio('run-grass', 'audio/run_grass.mp3')
   g.load.audio('run-wet', 'audio/run_wet.mp3')
   g.load.audio('final', 'audio/final.mp3')
+  g.load.audio('ambient', 'audio/ambient.mp3')
 
 create = ->
   g.canvas.oncontextmenu = (e) ->
@@ -72,6 +73,11 @@ create = ->
   g.input.onDown.add click
   
   createInventory()
+  
+  g.backgroundSound = g.add.audio('ambient', 1, true)
+  g.sound.setDecodedCallback(g.backgroundSound, ->
+    g.backgroundSound.play()
+  , this)
 
 heroExits = 'none'
 update = ->

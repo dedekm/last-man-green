@@ -21,6 +21,8 @@ class OtherPlayer extends Phaser.Sprite
     @ball = new Ball(@game, 0, 0, 'ball')
     @ball.anchor.set(0.5, 0.5)
     @game.physics.enable(@ball, Phaser.Physics.ARCADE)
+    
+    @sound = @game.add.audio('run-grass', 1, true)
   
   add: (x, y, flipped = false) ->
     flipped = if !flipped then 1 else -1
@@ -44,11 +46,13 @@ class OtherPlayer extends Phaser.Sprite
   run: (flipped) ->
     @game.physics.arcade.moveToXY(@ball, @ball.x + @game.camera.width * flipped, @ball.y, @speed + 10)
     @game.physics.arcade.moveToXY(this, @x + @game.camera.width * flipped, @y, @speed)
+    @sound.play()
     @fall()
   
   fall: ->
     @animations.play('fall', 9)
     @events.onAnimationComplete.add( ->
+      @sound.stop()
       @body.velocity.setTo(0, 0)
       @game.hero.unfreeze()
     , this)
