@@ -17,6 +17,9 @@ preload = ->
   
   g.load.tilemap('map', 'tilemaps/tilemap.csv', null, Phaser.Tilemap.CSV)
   g.load.image('tiles', 'images/stadion_tileset_16x16.png')
+  
+  g.load.audio('run-grass', 'audio/run_grass.mp3')
+  g.load.audio('run-wet', 'audio/run_wet.mp3')
 
 create = ->
   g.canvas.oncontextmenu = (e) ->

@@ -16,6 +16,11 @@ class Hero extends Phaser.Sprite
     @animations.add('right-down', [32..39], 9, true)
     @animations.add('down', [40..47], 9, true)
     @animations.add('idle', [48..55], 9, true)
+    
+    @sounds = {
+      'run-grass': @game.add.audio('run-grass', 1, true),
+      'run-wet': @game.add.audio('run-wet', 1, true)
+    }
 
     @body.setSize(20, 12, 6, 35)
     @anchor.set(0.5,0.9)
@@ -64,6 +69,10 @@ class Hero extends Phaser.Sprite
   moveToXY: (target, speed) ->
     @target = target
     @game.physics.arcade.moveToXY(this, @target.x, @target.y, speed || @speed)
+    unless @soundPlaying && @soundPlaying == @sounds['run-grass']
+      @soundPlaying = @sounds['run-grass']
+      @soundPlaying.play()
+    
     @game.time.events.add(Phaser.Timer.SECOND * 0.5, ->
       @moveToXY(@target, @speed + 20) if @body.speed > 0
     , this)
@@ -74,6 +83,9 @@ class Hero extends Phaser.Sprite
     
   stop: ->
     @body.velocity.setTo(0, 0)
+    if @soundPlaying
+      @soundPlaying.stop()
+      @soundPlaying = null
   
   comment: (text) ->
     x = Math.round(@position.x - (text.length * 5 / 2))
