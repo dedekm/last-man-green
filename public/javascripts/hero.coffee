@@ -63,7 +63,7 @@ class Hero extends Phaser.Sprite
   
   comment: (text) ->
     unless @state == 'commenting'
-      comment = @game.add.bitmapText(@position.x - text.length, @position.y - @body.height, 'default', text, 5)
+      comment = @game.add.bitmapText(@position.x - (text.length * 5 / 2), @position.y - @height, 'default', text, 5)
       @state = 'commenting'
       @game.time.events.add(Phaser.Timer.SECOND * 2, ->
         comment.destroy()
