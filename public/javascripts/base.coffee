@@ -1,7 +1,7 @@
 Hero = require './hero.coffee'
 Item = require './item.coffee'
 OtherPlayer = require './other_player.coffee'
-Combinations = require './combinations.coffee'
+Mechanics = require './mechanics.coffee'
 
 preload = ->
   g.load.bitmapFont(
@@ -130,6 +130,8 @@ click = (pointer) ->
   else if pointer.rightButton.isDown
     if g.itemClicked && g.itemClicked.inHand()
       g.itemClicked.returnToInventory()
+    else
+      g.hero.commentTile(g.map.getTileWorldXY(g.camera.x + pointer.x, g.camera.y + pointer.y).index)
 
 createInventory = ->
   graphics = g.add.graphics(100, 100)
@@ -158,4 +160,4 @@ g = new (Phaser.Game)(720 / 3, 480 / 3, Phaser.AUTO, 'last-man-green',
   update: update
   render: render
 )
-g.combinations = new Combinations
+g.mechanics = new Mechanics

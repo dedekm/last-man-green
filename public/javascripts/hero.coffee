@@ -62,12 +62,31 @@ class Hero extends Phaser.Sprite
     @body.velocity.setTo(0, 0)
   
   comment: (text) ->
+    x = Math.round(@position.x - (text.length * 5 / 2))
+    x = @game.camera.x + 18 if x < @game.camera.x + 16
+
+    comment = @game.add.bitmapText( x, Math.round(@position.y - @height), 'default', text, 5 )
+    @state = 'commenting'
+    
+    @game.time.events.add(Phaser.Timer.SECOND * 2, ->
+      comment.destroy()
+      @state = null
+    , this)
+  
+  commentCombination: (first, second) ->
     unless @state == 'commenting'
-      comment = @game.add.bitmapText(@position.x - (text.length * 5 / 2), @position.y - @height, 'default', text, 5)
-      @state = 'commenting'
-      @game.time.events.add(Phaser.Timer.SECOND * 2, ->
-        comment.destroy()
-        @state = null
-      , this)
+      text = @game.mechanics.check(first, second)
+      @comment(text)
+  
+  commentItem: (text) ->
+    unless @state == 'commenting'
+      @comment(text)
+    
+  commentTile: (index) ->
+    unless @state == 'commenting'
+      text = @game.mechanics.TILEMAP_ITEMS[index]
+      text = @game.mechanics.TILEMAP_ITEMS[text] if typeof text == 'number'
+      @comment(text) if text
+  
 
 module.exports = Hero
