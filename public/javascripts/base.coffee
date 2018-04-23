@@ -1,5 +1,6 @@
 Hero = require './hero.coffee'
 Item = require './item.coffee'
+OtherPlayer = require './other_player.coffee'
 Combinations = require './combinations.coffee'
 
 preload = ->
@@ -11,6 +12,7 @@ preload = ->
   
   g.load.spritesheet('ball', 'images/ball_10x10.png', 10, 10)
   g.load.spritesheet('hero', 'images/hero_32x52.png', 32, 52)
+  g.load.spritesheet('falling', 'images/falling_52x52.png', 52, 52)
   g.load.image('inventory', 'images/inventory.png')
   
   g.load.tilemap('map', 'tilemaps/tilemap.csv', null, Phaser.Tilemap.CSV)
@@ -32,9 +34,9 @@ create = ->
   g.layer.resizeWorld()
   g.map.setCollisionBetween(0, 57)
   
-  g.ball = new Item(g, 128, 128, 'ball')
-  g.ball.anchor.set(0.5,0.5)
-  g.ball.comment = 'Nice ball.'
+  g.otherPlayer = new OtherPlayer(g, 'falling')
+  g.add.existing(g.otherPlayer)
+  g.otherPlayer.run()
   
   g.hero = new Hero(g, 100, 120, 'hero')
   g.add.existing(g.hero)
@@ -83,11 +85,11 @@ update = ->
         y = g.camera.position.y + g.camera.height / 4 * 3
       else
         y = g.camera.position.y + g.camera.height / 2
-      g.ball.position.set(
-        g.camera.position.x + g.camera.width / 2,
-        y
-      )
-      g.add.existing(g.ball)
+      # g.ball.position.set(
+      #   g.camera.position.x + g.camera.width / 2,
+      #   y
+      # )
+      # g.add.existing(g.ball)
   
   g.physics.arcade.collide g.hero, g.layer, (hero, wall) ->
     if hero.body.blocked.up || hero.body.blocked.down
@@ -147,7 +149,7 @@ createInventory = ->
   graphics.destroy()
 
 render = ->
-    # g.debug.body(g.hero)
+  # g.debug.body(g.hero)
 
 g = new (Phaser.Game)(720 / 3, 480 / 3, Phaser.AUTO, 'last-man-green',
   preload: preload
