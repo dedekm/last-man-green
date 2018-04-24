@@ -71,12 +71,14 @@ create = ->
   y = g.camera.height * 2.5
   gate = new Item(@game, 48, y, 'gate')
   gate.anchor.set(0, 0.5)
+  gate.state = 'unpickable'
   gate.flipped = false
   g.add.existing(gate)
   
   gate = new Item(@game, g.world.width - 48, y, 'gate')
   gate.scale.x = -1
   gate.anchor.set(0, 0.5)
+  gate.state = 'unpickable'
   gate.flipped = true
   gate.comment = 'What is this?'
   g.add.existing(gate)
