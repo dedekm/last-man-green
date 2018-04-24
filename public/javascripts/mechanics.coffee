@@ -110,7 +110,7 @@ blick = (game, n, time = 0.3) ->
     else
       unless game.titles
         game.titles = true
-        for text, i in ['Thanks for playing', null, 'Martin Dedek', 'Viktor Dedek', 'Jiri Honzel']
+        for text, i in ['Thanks for playing', null, 'Martin Dedek', 'Viktor Dedek', 'Jiri Holzel']
           continue unless text
           title = game.add.bitmapText(
             Math.round(game.camera.x + game.camera.width / 2 - (text.length * 7 / 2)),
