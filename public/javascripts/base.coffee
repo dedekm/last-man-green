@@ -92,6 +92,11 @@ create = ->
   g.sound.setDecodedCallback(g.backgroundSound, ->
     g.backgroundSound.play()
   , this)
+  
+  help = document.createElement('div')
+  help.classList.add('help')
+  help.innerHTML+='left click = use / right click = inspect'
+  document.body.appendChild(help)
 
 heroExits = 'none'
 update = ->
