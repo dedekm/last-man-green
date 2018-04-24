@@ -50,9 +50,9 @@ create = ->
   
   g.otherPlayer = new OtherPlayer(g, 'other_player')
   
-  g.camera.x = 2 * (g.camera.width - 16)
-  g.camera.y = 2 * g.camera.height
-  g.hero = new Hero(g, 2.5 * g.camera.width - 2 * 16, 2.6 * g.camera.height, 'hero')
+  g.camera.x = 3 * (g.camera.width - 16)
+  g.camera.y = 3 * g.camera.height
+  g.hero = new Hero(g, 3.5 * g.camera.width - 2 * 16, 3.6 * g.camera.height, 'hero')
   g.add.existing(g.hero)
   
   g.bombs = []
@@ -67,13 +67,14 @@ create = ->
 
   @game.physics.enable(g.bombs, Phaser.Physics.ARCADE)
   g.add.existing(g.bombs[0])
-  y = g.camera.height * 1.5
-  gate = new Item(@game, 32, y, 'gate')
+  
+  y = g.camera.height * 2.5
+  gate = new Item(@game, 48, y, 'gate')
   gate.anchor.set(0, 0.5)
   gate.flipped = false
   g.add.existing(gate)
   
-  gate = new Item(@game, g.world.width - 32, y, 'gate')
+  gate = new Item(@game, g.world.width - 48, y, 'gate')
   gate.scale.x = -1
   gate.anchor.set(0, 0.5)
   gate.flipped = true
@@ -127,7 +128,7 @@ update = ->
     heroExits = null
     g.hero.travelled +=1
     
-    if g.hero.travelled >= 1 && g.otherPlayer.position.y == 0
+    if g.hero.travelled >= 3 && g.otherPlayer.position.y == 0
       return if g.camera.x == 0 || g.camera.x == g.world.width - g.camera.width
       
       g.hero.freeze()
