@@ -96,19 +96,25 @@ create = ->
 heroExits = 'none'
 update = ->
   if heroExits == 'right' && g.hero.x > g.camera.x + g.camera.width - g.hero.body.height
-    g.camera.x += g.camera.width - 16
-    g.hero.moveToXY(
-      x: g.camera.x + 28
-      y: g.hero.target.y
-    )
-    travelled = true
+    unless g.camera.x == g.world.width - g.camera.width
+      g.camera.x += g.camera.width - 16
+      g.hero.moveToXY(
+        x: g.camera.x + 28
+        y: g.hero.target.y
+      )
+      travelled = true
+    else
+      g.hero.stop()
   else if heroExits == 'left' && g.hero.x < g.camera.x + g.hero.body.height + 16
-    g.camera.x -= g.camera.width - 16
-    g.hero.moveToXY(
-      x: g.camera.x + g.camera.width - 16
-      y: g.hero.target.y
-    )
-    travelled = true
+    unless g.camera.x == 0
+      g.camera.x -= g.camera.width - 16
+      g.hero.moveToXY(
+        x: g.camera.x + g.camera.width - 16
+        y: g.hero.target.y
+      )
+      travelled = true
+    else
+      g.hero.stop()
   else if heroExits == 'up' && g.hero.y < g.camera.y + g.hero.body.height
     g.camera.y -= g.camera.height
     g.hero.moveToXY(
