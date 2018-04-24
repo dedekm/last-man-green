@@ -9,7 +9,7 @@ class Mechanics extends Object
   TILEMAP_ITEMS:
     68: 'Dead bird probably.'
     91: 'Oh, looks feminine.'
-    89: 'A bone. Doesn’t look feminine.'
+    89: "A bone. Doesnt look feminine."
     103: 'Sponsor, I guess.'
     37: 'Somebody beefy leaned on this railing.'
     102: 'Just a picture.'
