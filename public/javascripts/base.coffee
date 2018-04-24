@@ -10,6 +10,11 @@ preload = ->
     'fonts/carrier_command.png',
     'fonts/carrier_command.xml'
   )
+  g.load.bitmapFont(
+    'default-black',
+    'fonts/carrier_command_black.png',
+    'fonts/carrier_command.xml'
+  )
   
   g.load.spritesheet('ball', 'images/ball_10x10.png', 10, 10)
   g.load.image('gate', 'images/gate_32x96.png')
@@ -24,6 +29,7 @@ preload = ->
   g.load.audio('run-grass', 'audio/run_grass.mp3')
   g.load.audio('run-wet', 'audio/run_wet.mp3')
   g.load.audio('final', 'audio/final.mp3')
+  g.load.audio('end', 'audio/end.mp3')
   g.load.audio('ambient', 'audio/ambient.mp3')
 
 create = ->
@@ -50,11 +56,14 @@ create = ->
   g.add.existing(g.hero)
   
   g.bombs = []
-  g.bombs.push new Bomb(@game, -20, 190, 'bomb_white')
-  g.bombs.push new Bomb(@game, g.camera.width + 20, 200, 'bomb_red')
+  for i in [0..2]
+    g.bombs.push new Bomb(@game, 0, 0, 'bomb_white')
+    g.bombs.push new Bomb(@game, 0, 0, 'bomb_red')
+    
+    
+    g.bombs.shuffle
   for bomb in g.bombs
     bomb.animations.add('burn', [1,2], 5, true)
-  g.bombs[1].scale.x = -1
 
   @game.physics.enable(g.bombs, Phaser.Physics.ARCADE)
   g.add.existing(g.bombs[0])
@@ -73,6 +82,10 @@ create = ->
   g.input.onDown.add click
   
   createInventory()
+  
+  g.endSound = g.add.audio('end')
+  g.endSound.addMarker('bombs', 0, 18)
+  g.endSound.addMarker('vuvuzelas', 18, 54.5)
   
   g.backgroundSound = g.add.audio('ambient', 1, true)
   g.sound.setDecodedCallback(g.backgroundSound, ->
