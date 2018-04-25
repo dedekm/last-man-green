@@ -100,10 +100,20 @@ class Hero extends Phaser.Sprite
       @soundPlaying = null
   
   comment: (text) ->
-    x = Math.round(@position.x - (text.length * 5 / 2))
-    x = @game.camera.x + 18 if x < @game.camera.x + 16
+    length = text.length * 6
+    x = Math.round(@position.x - length / 2)
+    y = Math.round(@position.y - @height)
+    
+    # text out of screen
+    if x < @game.camera.x + 16
+      x = @game.camera.x + 18
+    else if x + length > @game.camera.x + @game.camera.width
+      x = @game.camera.x + @game.camera.width - length
 
-    comment = @game.add.bitmapText( x, Math.round(@position.y - @height), 'default', text, 5 )
+    if y < @game.camera.y + 6
+      y = @position.y + 6
+
+    comment = @game.add.bitmapText( x, y, 'default', text, 5 )
     @state = 'commenting'
     
     @game.time.events.add(Phaser.Timer.SECOND * 2, ->
