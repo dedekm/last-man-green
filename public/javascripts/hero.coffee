@@ -19,7 +19,7 @@ class Hero extends Phaser.Sprite
     
     @sounds = {
       'run-grass': @game.add.audio('run-grass', 1, true),
-      'run-wet': @game.add.audio('run-wet', 1, true),
+      # 'run-wet': @game.add.audio('run-wet', 1, true),
       'final': @game.add.audio('final')
     }
     @sounds['final'].addMarker('start', 0, 2.9)

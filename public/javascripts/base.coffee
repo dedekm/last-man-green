@@ -27,7 +27,7 @@ preload = ->
   g.load.image('tiles', 'images/stadion_tileset_16x16.png')
   
   g.load.audio('run-grass', 'audio/run_grass.mp3')
-  g.load.audio('run-wet', 'audio/run_wet.mp3')
+  # g.load.audio('run-wet', 'audio/run_wet.mp3')
   g.load.audio('final', 'audio/final.mp3')
   g.load.audio('end', 'audio/end.mp3')
   g.load.audio('ambient', 'audio/ambient.mp3')
