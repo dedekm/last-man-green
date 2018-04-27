@@ -47,6 +47,7 @@ create = ->
   g.layer = g.map.createLayer(0)
   g.layer.resizeWorld()
   g.map.setCollisionBetween(0, 57)
+  g.map.setCollision(79)
   
   g.otherPlayer = new OtherPlayer(g, 'other_player')
   
